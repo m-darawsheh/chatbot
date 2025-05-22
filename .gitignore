@@ -1,0 +1,4 @@
+# i should not push the venv folder because machine-specific and can be large
+venv/
+env/
+.vscode/
