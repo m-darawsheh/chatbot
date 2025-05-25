@@ -18,9 +18,9 @@
         in html we are using something called (tag) now this tags tell the browser "how to display content"
     - don't get confuse between flutter widgets(tell's flutter "what to display") 
         with html tags (tells the browser "how to display") 
-    - example (<h1>hello world</h1>)  this tells the browser the display hello "world" content like it is 
+    - example <h1>hello world</h1>  this tells the browser the display hello "world" content like it is 
         a header (make it big and bold) there are alot more tags like  <strong> -> let the contant bold
-        <small>make the text small, <a> let the text be a link and most of them work this way
+        </strong><small>make the text small</small>, <a> let the text be a link</a> and most of them work this way
         but it is limited like what if i want to make the contant with less bold and with red color(her comes CSS)
     - but befor start writing your code there a somethings that you need to write befor everything and it is mandatory
         (like the run app and material app in flutter),  first <!DOCTYPE html> thats tell's the browser what the type 
