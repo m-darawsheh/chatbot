@@ -10,7 +10,10 @@
         <h2>
             ask any question you want
         </h2>
-        <input type="text">
-        <button>ask</button>
+        <form action="/ask">
+            <label for="question">Your question:</label>
+            <input type="text" id="question" name="question" required>
+            <button type="submit">Ask</button>
+        </form>
     </body>
 </html>
