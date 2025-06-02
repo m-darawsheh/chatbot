@@ -18,6 +18,10 @@ app = flask.Flask(__name__)
 def index():
 	return render_template('index.html')
 
+@app.route('/chat')
+def chat():
+	return render_template('chat.html')
+
 @app.route('/ask', methods=['POST'])
 def ask():
     data = flask.request.get_json()

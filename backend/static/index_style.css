@@ -1,0 +1,48 @@
+html, body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	min-height: 100vh;
+	background-image: url("images/brain.jpg");
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+h1 {
+	font-size: 4rem;
+	font-weight: bold;
+	color: #000d61;
+}
+
+h2 {
+	font-size: 1.7rem;
+	font-weight: bold;
+	color: #000206;
+
+}
+
+
+button:hover {
+    transform: translateY(-4px) scale(1.04);
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+button {
+	font-family: 'Segoe UI', Arial, sans-serif;
+	font-size: 1.2rem;
+	font-weight: bold;
+	color: #ffffff;
+	margin-top: 20px;
+	padding: 10px 20px;
+	border: rgb(4, 30, 73) 1px solid;
+	border-radius: 5px;
+	background-color: #011387;
+	cursor: pointer;
+}

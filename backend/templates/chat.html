@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+		<link rel="stylesheet" href="{{ url_for('static', filename='chat_style.css') }}">
+        <title>chatBot</title>
+    </head>
+    <body>
+        <h1>
+            welcam to chatBot
+        </h1>
+        <h2>
+            ask any question you want
+        </h2>
+        <form onsubmit="send_question(event)" method="post">
+            <label for="question">Your question:</label>
+            <input type="text" id="question" name="question" required>
+            <button type="submit">Ask</button>
+        </form>
+		<P id="answer"></P>
+		<script>
+			function send_question(event) {
+				event.preventDefault();
+				const question = document.getElementById('question').value;
+				fetch('http://127.0.0.1:5000/ask', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({ question: question })
+				})
+				.then(response => response.json())
+				.then(data => {
+					document.getElementById('answer').innerText = 'Response: ' + data.answer;
+				})
+				.catch(error => {
+					console.error('Error:', error);
+				});
+			}
+		</script>
+    </body>
+</html>
