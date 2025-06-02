@@ -35,6 +35,7 @@ button:hover {
     transition: box-shadow 0.2s, transform 0.2s;
 }
 button {
+	
 	font-family: 'Segoe UI', Arial, sans-serif;
 	font-size: 1.2rem;
 	font-weight: bold;

@@ -1,11 +1,87 @@
+html, body
+{
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
 body
 {
+	min-height: 100vh;
+	background-image: url("images/background.png");
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	align-items: center ;
 	font-family: Arial, sans-serif;
 	background-color: #cd7777;
 	margin: 0;
-	padding: 20px;
 }
-h1, h2, h3
+
+#question_form
 {
-	color: #573f3f;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center ;
 }
+
+#commnication
+{
+	width: 100%;
+	max-width: 800px;
+	background-color: #757575;
+	border-radius: 10px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	padding: 20px;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	align-items: center;
+}
+
+form
+{
+
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	position: relative;
+	margin-bottom: 40px;
+}
+
+input::placeholder
+{
+	color: #000000e0;
+	font-weight: 500;
+}
+input, textarea
+{
+	font-family: Arial, sans-serif;
+	font-size: 1rem;
+	padding: 10px;
+	border: none;
+	border-radius: 10px;
+	width: 50%;
+	box-sizing: border-box;
+	color: #000000;
+	font-weight:500 ;
+	background-color: #727272;
+}
+
+button
+{
+	border: none;
+	margin-left: 5px;
+	padding: 10px;
+	border-radius: 10px;
+	background-color: #025b92;
+	color: #00254d;
+	font-weight: bold;
+	font-family: Arial, sans-serif;
+	cursor: pointer;
+}
+

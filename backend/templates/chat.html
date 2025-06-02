@@ -5,22 +5,21 @@
         <title>chatBot</title>
     </head>
     <body>
-        <h1>
-            welcam to chatBot
-        </h1>
-        <h2>
-            ask any question you want
-        </h2>
-        <form onsubmit="send_question(event)" method="post">
-            <label for="question">Your question:</label>
-            <input type="text" id="question" name="question" required>
-            <button type="submit">Ask</button>
-        </form>
-		<P id="answer"></P>
+		<div id="commnication">
+			<P id="answer"></P>
+			<P id="your_question"> </P>
+		</div>
+		<div id="question_form">
+			<form onsubmit="send_question(event)" method="post">
+				<input type="text" id="question" name="question" required placeholder="Ask her...">
+				<button type="submit">Ask</button>
+			</form>
+		</div>
 		<script>
 			function send_question(event) {
 				event.preventDefault();
 				const question = document.getElementById('question').value;
+				document.getElementById('your_question').innerText = 'Your question: ' + question;
 				fetch('http://127.0.0.1:5000/ask', {
 					method: 'POST',
 					headers: {
