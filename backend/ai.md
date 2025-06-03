@@ -24,4 +24,31 @@
     - so what is if i called the same two line of code again it will check if the module is in (.cache) and if so it will only load it and if not it will install it and load it. 
     - and you can change where does the HF installing the modules by changing the this env var (HF_HOME) 
 * after i installed the module and knew how to use it and how to get the result but there are 2 type of modules  
-1.   
+1. fist type of module is the pretrained text generating module like (deepseek, gpt2)
+  * this type of module take a text and try to complete it (he has a lot of words in his brain and he will use it to complete you sentense)
+  * if you give him a Q he will try to complete it not answring for example if a asked (what is today) the answer will be (what is today's news?"
+  "I'm not sure," said the man. "I'm not sure what's going on. I'm not sure what's going on. I'm not sure what's going on. I'm not sure what's going) 
+  because the module is not for answering qustions but it has like a small brain that good at completing the sentanse 
+  * to fix this i can fine-tuning the module (future traing) on a data that i has so now the module can take a Q and answer the same way but now he the answer will be a bit better because i fine-tuning it on a data so he will use some of this data to answer 
+  so he will stay the same only completing the text but now he will use some my data to complete from it. 
+  * and there a another way to make the module better is but prompt engineering which is leting him completing the sentase as alawys
+  but now i will let him completing the answer not the qustion and i will resturcter the prompt in a way that let the module completing the answer in a good, way so i will need to get the aswar first and add it to the prompt and let the module complete it 
+  example the quastion is (who are you) i will let it look like this (the Q is : who are you
+  the aswner is : i am mohammed 
+  Q : who am i
+  AI answer : 
+  )
+  and he will complete it 
+  * also you can do both ways (prompt engineering + fine-tuning) and it is the requmanded.
+2. secoend type of module is the QA(qustion answering) module.
+  * the kind of module also called Retrieval (because it is aculy not answering it is just giving you the closist thing to it in the contaxt) 
+  * in this type of AI module you have to give the qustion and the contax which the module will look for the answer for that qustion the that contaxt and if the answer is not in the cotaxt the module will not answer the qustion 
+  * but the return will be only the pice of words that answer the qustion example the q is what is your name and the cotaxt is hello my name is mohammed the return will be mohammed
+3. so in our sitiwation we have a data and we what the chatBot to answer to acording to that data  
+  * first we need a module to find that relevant snippet (peice of data) in our data
+  * now after getting the relevant data now we want to change it from just row data to be a good looking answer so we will us a module and some prompt engineering to do so 
+  * to find the relevant snippet we will use (all-MiniLM-L6-v2) module and after the prompt engineering we will use (microsoft/DialoGPT-medium) for making the relevant snippet looks more like an answer.
+
+
+note : what if we can't use more than one module and is module is a text generating module what to do now 
+first we will manualy look for the answer in the contaxt and use it for prompt engineering and also we can train the module in our data.
