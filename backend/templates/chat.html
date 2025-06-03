@@ -5,21 +5,23 @@
         <title>chatBot</title>
     </head>
     <body>
-		<div id="commnication">
+		<div id="your_massage">
+			<P id="your_question"></P>
+		</div>
+		<div id="ai_response">
 			<P id="answer"></P>
-			<P id="your_question"> </P>
 		</div>
 		<div id="question_form">
 			<form onsubmit="send_question(event)" method="post">
 				<input type="text" id="question" name="question" required placeholder="Ask her...">
-				<button type="submit">Ask</button>
+				<button type="submit" id="ask">Ask</button>
 			</form>
 		</div>
 		<script>
 			function send_question(event) {
 				event.preventDefault();
 				const question = document.getElementById('question').value;
-				document.getElementById('your_question').innerText = 'Your question: ' + question;
+				document.getElementById('your_question').innerText =  question +' ?';
 				fetch('http://127.0.0.1:5000/ask', {
 					method: 'POST',
 					headers: {

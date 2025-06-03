@@ -1,5 +1,5 @@
 import os
-os.environ["HF_HOME"] = "/sgoinfre/mabuyahy/huggingface"
+os.environ["HF_HOME"] = os.path.expanduser("~/sgoinfre/huggingface")
 import flask
 from flask import render_template
 from transformers import AutoTokenizer, AutoModelForCausalLM
