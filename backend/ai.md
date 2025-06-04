@@ -44,6 +44,8 @@
   * the kind of module also called Retrieval (because it is aculy not answering it is just giving you the closist thing to it in the contaxt) 
   * in this type of AI module you have to give the qustion and the contax which the module will look for the answer for that qustion the that contaxt and if the answer is not in the cotaxt the module will not answer the qustion 
   * but the return will be only the pice of words that answer the qustion example the q is what is your name and the cotaxt is hello my name is mohammed the return will be mohammed
+  * there are another type of QA module this kind of QA module will that your sentases and return them to vectors and then you job is to find the similarty between these vectors
+  * in short there are to type of QA first one you give it the contetx and the Q and it return the answer from the context and the other type of QA module he take your sentenses and return them to vector and also return your Q to vector and you have to find the closest vector form the sentanse to the Q using cosine_similarty 
 3. so in our sitiwation we have a data and we what the chatBot to answer to acording to that data  
   * first we need a module to find that relevant snippet (peice of data) in our data
   * now after getting the relevant data now we want to change it from just row data to be a good looking answer so we will us a module and some prompt engineering to do so 
