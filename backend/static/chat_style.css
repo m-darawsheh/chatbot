@@ -60,8 +60,14 @@ form
 
 input::placeholder
 {
-	color: #000000;
+	color: #000000b0;
 	font-weight: 500;
+}
+input:hover
+{
+	background-color: #29799697;
+	color: #000000;
+	transition: background-color 0.3s ease, color 0.3s ease;
 }
 input, textarea
 {
@@ -77,15 +83,23 @@ input, textarea
 	background-color: #29799644;
 }
 
+#ask:hover
+{
+	background-color: #00999cde;
+	color: #ffffff;
+	box-shadow: 0 0px 8px rgb(0, 0, 0);
+	transition: background-color 0.3s ease, color 0.3s ease;
+}
+
 #ask
 {
 	border: none;
 	margin-left: 5px;
 	padding: 10px;
 	border-radius: 10px;
-	border: #00122541 4px solid;
-	background: rgba(29, 44, 160, 0.17);
-	color: #00b0b3fe;
+	/* border: #00122541 4px solid; */
+	background: rgba(29, 44, 160, 0.044);
+	color: #00b0b3;
 	font-weight: bold;;
 	font-family: Arial, sans-serif;
 	cursor: pointer;
