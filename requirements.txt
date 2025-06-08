@@ -1,0 +1,14 @@
+# How to use this file:
+# 1. Make sure your virtual environment is activated.
+#    source venv/bin/activate
+#    source venv/bin/activate.fish 
+
+# 2. Install all required packages with:
+#    pip install -r requirements.txt
+
+flask
+torch
+transformers
+sentence-transformers
+scikit-learn
+numpy
