@@ -107,11 +107,11 @@ input, textarea
 	background-color: #00999cde;
 	color: #ffffff;
 	box-shadow: 0 0px 8px rgb(0, 0, 0);
-	transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 #ask
 {
+	transition: background-color 0.3s ease, color 0.3s ease;
 	border: none;
 	margin-left: 5px;
 	padding: 10px;

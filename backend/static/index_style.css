@@ -36,12 +36,12 @@ h2 {
 
 button:hover {
     transform: translateY(-4px) scale(1.04);
-    transition: box-shadow 0.2s, transform 0.2s;
 	color: #ffffff;
 	background-color: #011387ea;
 }
 button {
 
+	transition: box-shadow 0.2s ease, transform 0.2s ease;
 	font-family: 'Segoe UI', Arial, sans-serif;
 	font-size: 1.2rem;
 	font-weight: bold;
