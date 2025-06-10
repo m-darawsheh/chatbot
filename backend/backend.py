@@ -3,15 +3,15 @@ os.environ["HF_HOME"] = os.path.expanduser("~/sgoinfre/huggingface")
 
 from flask import Flask, render_template, request, jsonify # type: ignore
 
-from transformers import AutoTokenizer, AutoModelForCausalLM
+from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
-import numpy as np # type: ignore
 from sklearn.metrics.pairwise import cosine_similarity # type: ignore
 
 app = Flask(__name__)
 
-generating_tokenizer = AutoTokenizer.from_pretrained("gpt2")
-generate_response_model = AutoModelForCausalLM.from_pretrained("gpt2")
+module_name = "google/flan-t5-base"
+generating_tokenizer = AutoTokenizer.from_pretrained(module_name)
+generate_response_model = AutoModelForSeq2SeqLM.from_pretrained(module_name)
 
 from sentence_transformers import SentenceTransformer # type: ignore
 vectoring_model = SentenceTransformer('all-MiniLM-L6-v2')
@@ -34,19 +34,22 @@ def get_relevant_context(question, knowledge):
 def generate_response(question, context):
     """Generate conversational response using context"""
     prompt = f"""
-    [System] You're a helpful support assistant for AI Solutions Inc.
-    Use this context to answer questions:
-    {context}
-    [User] {question}
-    [Assistant]"""
+    context: {context}
+    question: {question}
+    answer:"""
+    # print("------------------")
+    # print(prompt)
     inputs = generating_tokenizer(prompt, return_tensors="pt")
     outputs = generate_response_model.generate(
-        inputs.input_ids,
+         **inputs,
         max_length=200,
-        pad_token_id=generating_tokenizer.eos_token_id,
-        temperature=0.7
+        pad_token_id=generating_tokenizer.pad_token_id,
+        do_sample=True,
+        top_p=0.9,
+        temperature=0.8
     )
     full_response = generating_tokenizer.decode(outputs[0], skip_special_tokens=True)
+    # print(full_response)
     return full_response.split("[Assistant]")[-1].strip()
 
 @app.route('/')
@@ -62,6 +65,7 @@ def ask():
     data = request.get_json()
     user_question = data['question']
     context = get_relevant_context(user_question, COMPANY_KNOWLEDGE)
+    print(context)
     answer = generate_response(user_question, context)
     return jsonify({'answer': answer})
 
