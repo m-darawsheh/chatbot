@@ -48,6 +48,25 @@ body
 	/* margin-bottom: 20px; */
 }
 
+#answer:not(:empty) {
+	padding: 20px 40px 20px 0;
+}
+#answer
+{
+	width: 100%;
+	display: flex;
+	justify-content: flex-end;
+	position: relative;
+	/* background-color: #727272; */
+	background: rgba(0, 85, 130, 0.627);
+	border-radius: 25px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	color: #000000;
+	font-weight: bold;
+	font-size: 1rem;
+	/* margin-bottom: 20px; */
+}
+
 form
 {
 
