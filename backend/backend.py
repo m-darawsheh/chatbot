@@ -16,10 +16,10 @@ generate_response_model = AutoModelForSeq2SeqLM.from_pretrained(module_name)
 from sentence_transformers import SentenceTransformer # type: ignore
 vectoring_model = SentenceTransformer('all-MiniLM-L6-v2')
 
-COMPANY_KNOWLEDGE = {
-    "about": "AI Solutions Inc. provides AI-powered business solutions.",
-    "contact": "You can contact us at contact@aisolutions.com.",
-    "services": "We offer NLP, computer vision, and data analytics services."
+ABUYAHYA_KNOWLEDGE = {
+    "name": "my name is mohammed abuyahya",
+    "age": "I am 20 years old.",
+    "location": "I live in amman, Jordan.",
 }
 
 def get_relevant_context(question, knowledge):
@@ -64,7 +64,7 @@ def chat():
 def ask():
     data = request.get_json()
     user_question = data['question']
-    context = get_relevant_context(user_question, COMPANY_KNOWLEDGE)
+    context = get_relevant_context(user_question, ABUYAHYA_KNOWLEDGE)
     print(context)
     answer = generate_response(user_question, context)
     return jsonify({'answer': answer})
