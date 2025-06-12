@@ -23,25 +23,41 @@ ABUYAHYA_KNOWLEDGE = {
 }
 
 def get_relevant_context(question, knowledge):
-    question_vector = vectoring_model.encode(question)
-    knowledge_vectors = {k: vectoring_model.encode(str(v)) for k,v in knowledge.items()}
-    similarities = {}
-    for key, vector in knowledge_vectors.items():
-        similarities[key] = cosine_similarity([question_vector], [vector])[0][0]
-    best_match = max(similarities, key=similarities.get)
-    return knowledge[best_match]
+    """
+    Find the most relevant context from the knowledge base for a given question.
+    Returns the best matching knowledge value, or None if no good match is found.
+    """
+    if not question or not knowledge:
+        return None
+
+    question_vec = vectoring_model.encode(question)
+    best_key = None
+    best_score = -1
+
+    for key, value in knowledge.items():
+        value_vec = vectoring_model.encode(str(value))
+        score = cosine_similarity([question_vec], [value_vec])[0][0]
+        if score > best_score:
+            best_score = score
+            best_key = key
+
+    print(f"Best key: {best_key}, Score: {best_score}")
+    if best_score < 0.3:
+        return None
+    return knowledge[best_key]
 
 def generate_response(question, context):
-    """Generate conversational response using context"""
-    prompt = f"""
-    context: {context}
-    question: {question}
-    answer:"""
-    # print("------------------")
-    # print(prompt)
+    """
+    Generate a conversational response using the provided context.
+    Returns a string response.
+    """
+    if not context:
+        return "I don't know the answer to that question."
+
+    prompt = f"context: {context}\nquestion: {question}\nanswer:"
     inputs = generating_tokenizer(prompt, return_tensors="pt")
     outputs = generate_response_model.generate(
-         **inputs,
+        **inputs,
         max_length=200,
         pad_token_id=generating_tokenizer.pad_token_id,
         do_sample=True,
@@ -49,8 +65,7 @@ def generate_response(question, context):
         temperature=0.8
     )
     full_response = generating_tokenizer.decode(outputs[0], skip_special_tokens=True)
-    # print(full_response)
-    return full_response.split("[Assistant]")[-1].strip()
+    return full_response
 
 @app.route('/')
 def index():
@@ -65,7 +80,6 @@ def ask():
     data = request.get_json()
     user_question = data['question']
     context = get_relevant_context(user_question, ABUYAHYA_KNOWLEDGE)
-    print(context)
     answer = generate_response(user_question, context)
     return jsonify({'answer': answer})
 
