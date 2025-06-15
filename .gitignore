@@ -2,5 +2,5 @@
 venv/
 env/
 .vscode/
-pdf/*.pdf
-chrome_db/
+backend/pdf/*.pdf
+backend/chrome_db/
