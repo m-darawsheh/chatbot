@@ -2,4 +2,4 @@
 venv/
 env/
 .vscode/
-pdf/*.pdf
+backend/pdf/*.pdf

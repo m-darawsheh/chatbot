@@ -7,11 +7,11 @@ from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
 from sklearn.metrics.pairwise import cosine_similarity # type: ignore
 
-import fitz  
+import fitz #type: ignore 
 
 app = Flask(__name__)
 
-module_name = "google/flan-t5-base"
+module_name = "meta-llama/Llama-3-8B-Instruct"
 generating_tokenizer = AutoTokenizer.from_pretrained(module_name)
 generate_response_model = AutoModelForSeq2SeqLM.from_pretrained(module_name)
 
@@ -26,10 +26,58 @@ def get_text_from_pdf(pdf_path):
 			text += page.get_text()
 		return text
 
-def chunk_text(text, chunk_size=500):
-    words = text.split()
-    chunks = [' '.join(words[i:i+chunk_size]) for i in range(0, len(words), chunk_size)]
-    return chunks
+def chunk_text(text, max_chunk_size=350):
+    # Split text into paragraphs using double newlines
+    paragraphs = [p.strip() for p in text.split('\n\n') if p.strip()]
+    
+    chunks = []
+    current_chunk = []
+    current_size = 0
+
+    for para in paragraphs:
+        words = para.split()
+        word_count = len(words)
+        
+        # If paragraph is too large, split it
+        if word_count > max_chunk_size:
+            if current_chunk:
+                chunks.append(" ".join(current_chunk))
+                current_chunk = []
+                current_size = 0
+            # Split large paragraph into sub-chunks
+            for i in range(0, word_count, max_chunk_size):
+                chunk = " ".join(words[i:i + max_chunk_size])
+                chunks.append(chunk)
+            continue
+        
+        # Add paragraph to current chunk if it fits
+        if current_size + word_count <= max_chunk_size:
+            current_chunk.append(para)
+            current_size += word_count
+        else:
+            chunks.append(" ".join(current_chunk))
+            current_chunk = [para]
+            current_size = word_count
+    
+    # Add last chunk
+    if current_chunk:
+        chunks.append(" ".join(current_chunk))
+
+    new_chunks = []
+    overlap_size = 50
+    for i in range(len(chunks)):
+        if i == 0:
+            new_chunks.append(chunks[i])
+        else:
+            # Add overlap with the previous chunk
+            overlap = " ".join(chunks[i-1].split()[-overlap_size:])
+            new_chunk = overlap + " " + chunks[i]
+            new_chunks.append(new_chunk)
+    if len(new_chunks) > 1:
+        # Ensure the last chunk has no overlap
+        new_chunks[-1] = new_chunks[-1].split()[:max_chunk_size]
+
+    return new_chunks
 
 def get_relevant_context(question, knowledge):
 	"""
