@@ -3,4 +3,4 @@ venv/
 env/
 .vscode/
 backend/pdf/*.pdf
-backend/chrome_db/
+backend/chrome_db/*
