@@ -38,11 +38,59 @@ def get_text_from_pdf(pdf_path):
             text += page.get_text()
     return text
 
-def chunk_text(text, chunk_size=500):
+def chunk_text(text, max_chunk_size=350):
+    # Split text into paragraphs using double newlines
+    paragraphs = [p.strip() for p in text.split('\n\n') if p.strip()]
 
-    words = text.split()
-    chunks = [' '.join(words[i:i+chunk_size]) for i in range(0, len(words), chunk_size)]
-    return chunks
+    chunks = []
+    current_chunk = []
+    current_size = 0
+
+    for para in paragraphs:
+        words = para.split()
+        word_count = len(words)
+
+        # If paragraph is too large, split it
+        if word_count > max_chunk_size:
+            if current_chunk:
+                chunks.append(" ".join(current_chunk))
+                current_chunk = []
+                current_size = 0
+            # Split large paragraph into sub-chunks
+            for i in range(0, word_count, max_chunk_size):
+                chunk = " ".join(words[i:i + max_chunk_size])
+                chunks.append(chunk)
+            continue
+
+        # Add paragraph to current chunk if it fits
+        if current_size + word_count <= max_chunk_size:
+            current_chunk.append(para)
+            current_size += word_count
+        else:
+            chunks.append(" ".join(current_chunk))
+            current_chunk = [para]
+            current_size = word_count
+
+    # Add last chunk
+    if current_chunk:
+        chunks.append(" ".join(current_chunk))
+
+    new_chunks = []
+    overlap_size = 50
+    for i in range(len(chunks)):
+        if i == 0:
+            new_chunks.append(chunks[i])
+        else:
+            # Add overlap with the previous chunk
+            overlap = " ".join(chunks[i-1].split()[-overlap_size:])
+            new_chunk = overlap + " " + chunks[i]
+            new_chunks.append(new_chunk)
+    if len(new_chunks) > 1:
+        # Ensure the last chunk has no overlap
+        new_chunks[-1] = new_chunks[-1].split()[:max_chunk_size]
+
+    return new_chunks
+
 
 def populate_chroma_if_empty():
     # Only encode and insert if Chroma is empty
@@ -59,15 +107,18 @@ def populate_chroma_if_empty():
 def get_relevant_context_chroma(question):
     results = collection.query(
         query_texts=[question],
-        n_results=1,  # You can adjust this number
+        n_results=1,  # Get top 1 most relevant chunk for better context
         include=["distances", "documents"]
     )
-    print(f"[INFO] Query results: {results}")
-    # Filter results by distance < 1
+    for doc, dist in zip(results["documents"][0], results["distances"][0]):
+        print(f"\nDistance: {dist}")
+
+    # Filter results by distance
     filtered = [
         doc for doc, dist in zip(results["documents"][0], results["distances"][0])
-        if dist < 0.5
+        if dist < 1.0
     ]
+
     if not filtered:
         return None
     return filtered[0]  # Return the most relevant filtered chunk
@@ -77,15 +128,24 @@ def generate_response(question, context):
     if not context:
         return "I don't know the answer to that question."
 
-    prompt = f"Context: {context}\nQuestion: {question}\nAnswer:"
+    prompt = f"""Based on the following context, provide a detailed and accurate answer to the question.
+    If the context doesn't contain enough information to fully answer the question, say so.
+
+    Context: {context}
+
+    Question: {question}
+
+    Detailed Answer:"""
+
     inputs = generating_tokenizer(prompt, return_tensors="pt")
     outputs = generate_response_model.generate(
         **inputs,
         max_length=900,
         pad_token_id=generating_tokenizer.pad_token_id,
         do_sample=True,
-        top_p=0.9,
-        temperature=0.8
+        top_p=0.92,
+        temperature=0.7,  # Lowered for more focused responses
+        repetition_penalty=1.2  # Prevent repetitive text
     )
     full_response = generating_tokenizer.decode(outputs[0], skip_special_tokens=True)
     print(f"Generated full response: {full_response}")
