@@ -107,21 +107,34 @@ def populate_chroma_if_empty():
 def get_relevant_context_chroma(question):
     results = collection.query(
         query_texts=[question],
-        n_results=1,  # Get top 1 most relevant chunk for better context
+        n_results=5,  # Increased from 1 to get more results for debugging
         include=["distances", "documents"]
     )
+    # print(f"documents: {results['documents'][0]} \n")
     for doc, dist in zip(results["documents"][0], results["distances"][0]):
         print(f"\nDistance: {dist}")
-
     # Filter results by distance
     filtered = [
         doc for doc, dist in zip(results["documents"][0], results["distances"][0])
-        if dist < 1.0
+        # if dist < 1.7
     ]
 
     if not filtered:
-        return None
-    return filtered[0]  # Return the most relevant filtered chunk
+        filtered = documents[:2]
+
+    print(f"Context found: {len(filtered)} relevant chunks.")
+
+    def score_chunk(chunk):
+        q_words = set(question.lower().split())
+        c_words = set(chunk.lower().split())
+        return len(q_words & c_words)
+
+    filtered.sort(key=score_chunk, reverse=True)
+
+    # Return merged context
+    combined_context = " ".join(filtered[:2])  # or more
+    return combined_context
+
 
 
 def generate_response(question, context):
@@ -160,6 +173,16 @@ def index():
 @app.route('/chat')
 def chat():
     return render_template('chat.html')
+
+# @app.route('/ask_web', methods=['POST'])
+# def ask_web():
+# 	data = request.get_json()
+# 	user_question = data['question']
+# 	context = get_relevant_context_chroma(user_question)
+# 	if context is None:
+# 		return jsonify({'answer': "I don't know the answer to that question."})
+# 	answer = generate_response(user_question, context)
+# 	return jsonify({'answer': answer})
 
 @app.route('/ask', methods=['POST'])
 def ask():
