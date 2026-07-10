@@ -16,7 +16,31 @@
 				<input type="text" id="question" name="question" required placeholder="Ask her...">
 				<button type="submit" id="ask">Ask</button>
 			</form>
+			<!-- <form onsubmit="get_from_web(event)" method="post">
+				<button type="submit" id="ask_web">Ask web</button>
+			</form> -->
 		</div>
+		<!-- <script>
+			function get_from_web(event) {
+				event.preventDefault();
+				const question = document.getElementById('question').value;
+				document.getElementById('your_question').innerText = 'Searching the web...';
+				fetch('http://127.0.1:5000/ask_web', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({ question: question })
+				})
+				.then(response => response.json())
+				.then(data => {
+					document.getElementById('answer').innerText = 'Response: ' + data.answer;
+				})
+				.catch(error => {
+					console.error('Error:', error);
+				});
+			}
+		</script> -->
 		<script>
 			function send_question(event) {
 				event.preventDefault();
