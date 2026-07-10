@@ -87,7 +87,7 @@ def chunk_text(text, max_chunk_size=350):
             new_chunks.append(new_chunk)
     if len(new_chunks) > 1:
         # Ensure the last chunk has no overlap
-        new_chunks[-1] = new_chunks[-1].split()[:max_chunk_size]
+        new_chunks[-1] = " ".join(new_chunks[-1].split()[:max_chunk_size])
 
     return new_chunks
 
@@ -120,7 +120,7 @@ def get_relevant_context_chroma(question):
     ]
 
     if not filtered:
-        filtered = documents[:2]
+        filtered = results["documents"][0][:2]
 
     print(f"Context found: {len(filtered)} relevant chunks.")
 
